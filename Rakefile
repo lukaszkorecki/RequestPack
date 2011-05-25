@@ -18,8 +18,14 @@ namespace :compile do
     puts "[Compiling CoffeeScript files from #{source_path} to #{target_path}]"
 
     Dir["#{source_path}/*.coffee"].map { |f| [ f, File.read(f) ]}.each do |path, content|
-      source = CoffeeScript.compile(content)
       name = path.split('/').last.sub('.coffee', '.js')
+      begin
+        source = CoffeeScript.compile(content)
+      rescue => e
+        puts "[ERROR] in #{name}\n\t#{e.message}"
+        abort "\n\n[Compile failed]"
+      end
+      puts "\t #{name}"
       File.open("#{target_path}/#{name}",'w') { |f| f.write source }
     end
     puts "[done]\n"
