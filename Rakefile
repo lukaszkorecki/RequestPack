@@ -45,5 +45,15 @@ namespace :compile do
     compile 'spec/coffee', 'spec/javascripts'
     compile 'source', 'dist'
   end
+
+  desc "Compile all javascript and run specs through phantomjs - assumess `rake jasmine` is running already"
+  task :and_spec do
+    compile 'spec/coffee', 'spec/javascripts'
+    compile 'source', 'dist'
+
+    STDOUT << `phantomjs spec/javascripts/run-jasmine.js http://localhost:8888`
+
+  end
 end
+
 
