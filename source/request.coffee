@@ -1,6 +1,5 @@
-class Request
+window.Request = class Request
   constructor: (@url = '', @requestHeaders={}, @auth = {}) ->
-    @auth = { 'username' : undefined , 'password' : undefined} if @auth is {}
 
   createFormData: (object) ->
     data = new FormData()
@@ -34,4 +33,3 @@ class Request
   post: (path, data, callbacks) -> this.httpRequest 'POST', path, data, callbacks
   put: (path, callbacks) -> this.httpRequest 'PUT', path, false, callbacks
   delete: (path, callbacks) -> this.httpRequest 'DELETE', path, false, callbacks
-window.Request = Request

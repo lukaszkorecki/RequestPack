@@ -1,16 +1,10 @@
 (function() {
   var Request;
-  Request = (function() {
+  window.Request = Request = (function() {
     function Request(url, requestHeaders, auth) {
       this.url = url != null ? url : '';
       this.requestHeaders = requestHeaders != null ? requestHeaders : {};
       this.auth = auth != null ? auth : {};
-      if (this.auth === {}) {
-        this.auth = {
-          'username': void 0,
-          'password': void 0
-        };
-      }
     }
     Request.prototype.createFormData = function(object) {
       var data, name, value;
@@ -59,5 +53,4 @@
     };
     return Request;
   })();
-  window.Request = Request;
 }).call(this);
