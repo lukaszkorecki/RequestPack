@@ -42,12 +42,12 @@ req.get('/chunkybacon',
 ```javascript
 var req = new Req('http://server.com/api', { accept : 'application/json'} , {username : 'lol', password : 'wat'})
 
-req.get('/chunkybacon',
+req.get('/chunkybacon', {
   onSuccess : function(request) {
-    console.log(request.responseText)
+    console.log(request.responseText);
   },
   onFailure : function(request) {
-    alert 'no bacon for you, lad'
+    alert( 'no bacon for you, lad');
   }
-)
+});
 ```
