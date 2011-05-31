@@ -6,6 +6,8 @@
     server = sinon.fakeServer.create();
     server.respondWith('GET', 'http://example.com/test', [200, {}, 'hey']);
     server.respondWith('GET', 'http://example.com/test_fail', [401, {}, 'fail']);
+    server.respondWith('POST', 'http://example.com/article', [201, {}, 'Created']);
+    server.respondWith('DELETE', 'http://example.com/woop', [503, {}, '<p>FAIL</p>']);
     it('creates an instance of Request', function() {
       return expect(request).toBeDefined();
     });
@@ -72,12 +74,44 @@
         });
         return server.respond();
       });
-      return it('calls onFailure callback if path doesnt exist', function() {
-        return request.get('/lolol', {
+      it('calls onFailure callback if path doesnt exist', function() {
+        request.get('/lolol', {
           onFailure: function(req) {
             return expect(req.status).toBe(404);
           }
         });
+        return server.respond();
+      });
+      it('POSTs data to a resource and fires a callback on success', function() {
+        request.post('/article', {
+          body: 'trolololo'
+        }, {
+          onSuccess: __bind(function(req) {
+            expect(req.status).toBe(201);
+            return expect(req.responseText).toBe('Created');
+          }, this)
+        });
+        return server.respond();
+      });
+      it('calls onFailure on failing post', function() {
+        request.post('/articles', {
+          body: 'trolololo'
+        }, {
+          onFailure: __bind(function(req) {
+            return expect(req.status).toBe(404);
+          }, this)
+        });
+        return server.respond();
+      });
+      return it('recovers from 503 error after DELETE request', function() {
+        request["delete"]('/woop', {
+          onFailure: function(req) {
+            expect(req.status).toBe(503);
+            expect(req.responseText).toBe('<p>FAIL</p>');
+            return expect(req.responseText).notToBe('fail');
+          }
+        });
+        return server.respond();
       });
     });
   });
