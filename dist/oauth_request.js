@@ -79,7 +79,7 @@
       var url;
       url = this.urlConf.root + path;
       return this.oauth.request({
-        method: 'put',
+        method: 'PUT',
         url: url,
         success: callbacks.onSuccess,
         failure: callbacks.onFailure
