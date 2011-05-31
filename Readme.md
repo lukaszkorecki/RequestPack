@@ -7,12 +7,12 @@ It's built for use with web runtimes such as [Titanium Desktop](http://appcelera
 Google Chrome Applications.
 
 
-# Why not just use jQuery/Prototype/AwesomeFramework?
+## Why not just use jQuery/Prototype/AwesomeFramework?
 
 Because it's simple and just works. It also doesn't depend on any other
 library (except [jsOAuth](https://github.com/bytespider/jsOAuth)).
 
-# API
+## API
 
 `RequestPack` consists of two classes, each using same interface, but
 differing in the way authentication works:
@@ -21,7 +21,7 @@ differing in the way authentication works:
 - `OAuthRequest` - has the same API but uses jsOAuth as the core for
   making requests:
 
-## Request
+### Request
 
 `Request` is easy to use and provides neat abstraction from regular
 `XMLHttpRequest` stuff:
@@ -30,10 +30,8 @@ differing in the way authentication works:
 req = new Req 'http://server.com/api', { accept : 'application/json'} , {username : 'lol', password : 'wat'}
 
 req.get('/chunkybacon',
-  onSuccess : (request) ->
-    console.log(request.responseText)
-  onFailure : (request) ->
-    alert 'no bacon for you, lad'
+  onSuccess : (request) -> console.log(request.responseText)
+  onFailure : (request) -> alert 'no bacon for you, lad'
 )
 ```
 
@@ -51,3 +49,9 @@ req.get('/chunkybacon', {
   }
 });
 ```
+
+See [Campfire](http://campfirenow.com) class in `examples` directory for more details.
+
+## Licence
+
+MIT
