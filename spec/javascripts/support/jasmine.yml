@@ -12,6 +12,7 @@
 #
 src_files:
     - dist/**/*.js
+    - vendor/**/*.js
 
 # stylesheets
 #
