@@ -6,7 +6,7 @@
       this.urlConf = urlConf != null ? urlConf : null;
       this.consumer = consumer;
       this.requestParams = '';
-      if (this.urlConfig == null) {
+      if (this.urlConf == null) {
         this.urlConf = {
           request_token: '/request_token',
           access_token: '/access_token',
@@ -19,21 +19,6 @@
     OauthRequest.prototype.setAccessTokens = function(oauthToken, oauthTokenSecret) {
       return this.oauth.setAccessToken([oauthToken, oauthTokenSecret]);
     };
-    OauthRequest.prototype.requestAuth = function(openURLFunction) {
-      var failure;
-      failure = function(data) {
-        console.log('FAILED');
-        return console.dir(data);
-      };
-      return this.oauth.get(this.urlConf.root + this.urlConf.request_token, (__bind(function(data) {
-        if (data && data.text) {
-          openURLFunction(this.urlConf.root + this.urlConf.authorize + '?' + data.text);
-          return this.requestParams = data.text;
-        } else {
-          return failure(data);
-        }
-      }, this)), fail);
-    };
     OauthRequest.prototype.secretAndToken = function(string) {
       var pair, res;
       res = {};
@@ -43,6 +28,22 @@
         return res[pair[0]] = res[pair[1]];
       });
       return res;
+    };
+    OauthRequest.prototype.requestAuth = function(openURLFunction) {
+      var failure, request_url;
+      failure = function(data) {
+        console.log('FAILED');
+        return console.dir(data);
+      };
+      request_url = this.urlConf.root + this.urlConf.request_token;
+      return this.oauth.get(request_url, (__bind(function(data) {
+        if (data && data.text) {
+          openURLFunction(this.urlConf.root + this.urlConf.authorize + '?' + data.text);
+          return this.requestParams = data.text;
+        } else {
+          return failure(data);
+        }
+      }, this)), fail);
     };
     OauthRequest.prototype.userAuthorize = function(pin, callbacks) {
       var failure, url;

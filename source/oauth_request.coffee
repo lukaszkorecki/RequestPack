@@ -5,7 +5,7 @@ window.OauthRequest = class OauthRequest
     @urlConf = {
       request_token : '/request_token',
       access_token : '/access_token',
-      authorize : '/authorize' } unless @urlConfig?
+      authorize : '/authorize' } unless @urlConf?
 
     @urlConf.root = url
 
@@ -13,19 +13,6 @@ window.OauthRequest = class OauthRequest
 
   setAccessTokens : (oauthToken, oauthTokenSecret) ->
     @oauth.setAccessToken [oauthToken, oauthTokenSecret]
-
-  requestAuth : (openURLFunction) ->
-    failure = (data) ->
-      console.log('FAILED')
-      console.dir(data)
-
-    @oauth.get(@urlConf.root + @urlConf.request_token, ((data) =>
-      if data and data.text
-        openURLFunction @urlConf.root+@urlConf.authorize+'?'+data.text
-        @requestParams = data.text
-      else
-        failure(data)
-    ), fail)
 
   secretAndToken : (string) ->
     res = {}
@@ -35,6 +22,21 @@ window.OauthRequest = class OauthRequest
       res[pair[0]] = res[pair[1]]
 
     res
+
+  requestAuth : (openURLFunction) ->
+    failure = (data) ->
+      console.log('FAILED')
+      console.dir(data)
+    request_url = @urlConf.root + @urlConf.request_token
+
+    @oauth.get(request_url, ((data) =>
+      if data and data.text
+        openURLFunction @urlConf.root+@urlConf.authorize+'?'+data.text
+        @requestParams = data.text
+      else
+        failure(data)
+    ), fail)
+
 
   userAuthorize : (pin, callbacks) ->
     failure = (data) ->
