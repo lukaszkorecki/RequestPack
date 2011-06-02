@@ -24,18 +24,22 @@ window.OauthRequest = class OauthRequest
     res
 
   requestAuth : (openURLFunction) ->
+    @openURLFunction = openURLFunction
     failure = (data) ->
       console.log('FAILED')
       console.dir(data)
     request_url = @urlConf.root + @urlConf.request_token
 
-    @oauth.get(request_url, ((data) =>
+    success = (data) =>
       if data and data.text
-        openURLFunction @urlConf.root+@urlConf.authorize+'?'+data.text
+        @openURLFunction @urlConf.root+@urlConf.authorize+'?'+data.text
         @requestParams = data.text
       else
+        console.log 'failed get'
         failure(data)
-    ), fail)
+
+
+    @oauth.get(request_url, success, failure)
 
 
   userAuthorize : (pin, callbacks) ->

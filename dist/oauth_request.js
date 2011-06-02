@@ -30,20 +30,23 @@
       return res;
     };
     OauthRequest.prototype.requestAuth = function(openURLFunction) {
-      var failure, request_url;
+      var failure, request_url, success;
+      this.openURLFunction = openURLFunction;
       failure = function(data) {
         console.log('FAILED');
         return console.dir(data);
       };
       request_url = this.urlConf.root + this.urlConf.request_token;
-      return this.oauth.get(request_url, (__bind(function(data) {
+      success = __bind(function(data) {
         if (data && data.text) {
-          openURLFunction(this.urlConf.root + this.urlConf.authorize + '?' + data.text);
+          this.openURLFunction(this.urlConf.root + this.urlConf.authorize + '?' + data.text);
           return this.requestParams = data.text;
         } else {
+          console.log('failed get');
           return failure(data);
         }
-      }, this)), fail);
+      }, this);
+      return this.oauth.get(request_url, success, failure);
     };
     OauthRequest.prototype.userAuthorize = function(pin, callbacks) {
       var failure, url;

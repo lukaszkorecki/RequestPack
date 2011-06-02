@@ -1,6 +1,6 @@
 (function() {
   describe('OauthRequest Spec', function() {
-    var consumer, url, urlconf;
+    var consumer, orequest, url, urlconf;
     url = 'http://example.com';
     urlconf = {
       request_token: 'req',
@@ -12,6 +12,7 @@
       secret: 'wat'
     };
     window.OAuth = function() {};
+    orequest = new OauthRequest(url, null, consumer);
     describe('initialization and url options', function() {
       it('sets the default oauth url configuration options', function() {
         var req;
@@ -30,9 +31,29 @@
         return expect(req.urlConf.request_token).toBe('req');
       });
     });
-    return it('splits uqery stirng into a hash', function() {
+    it('splits uqery stirng into a hash', function() {
       expect(OauthRequest.prototype.secretAndToken('a=1&b=5').a).toBe('1');
       return expect(OauthRequest.prototype.secretAndToken('a=1&b=5').b).toBe('5');
+    });
+    return describe('OAuth dance', function() {
+      return it('sets the access_token', function() {
+        var fakeOauth, requestData;
+        requestData = {
+          text: 'some=data&you=know'
+        };
+        fakeOauth = {
+          get: function(url, successCallback) {
+            expect(url).toMatch(/example.com\/request_token/);
+            return successCallback(requestData);
+          },
+          openURL: function(pin_url) {
+            return expect(pin_url).toMatch(/example.com/);
+          }
+        };
+        orequest.oauth = fakeOauth;
+        orequest.requestAuth(fakeOauth.openURL);
+        return expect(orequest.requestParams).toBe(requestData.text);
+      });
     });
   });
 }).call(this);
