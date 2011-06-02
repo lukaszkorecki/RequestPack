@@ -25,7 +25,7 @@
       pair = [];
       string.split('&').forEach(function(data) {
         pair = data.split('=');
-        return res[pair[0]] = res[pair[1]];
+        return res[pair[0]] = pair[1];
       });
       return res;
     };

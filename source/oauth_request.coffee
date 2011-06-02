@@ -19,7 +19,7 @@ window.OauthRequest = class OauthRequest
     pair = []
     string.split('&').forEach (data) ->
       pair = data.split '='
-      res[pair[0]] = res[pair[1]]
+      res[pair[0]] = pair[1]
 
     res
 
