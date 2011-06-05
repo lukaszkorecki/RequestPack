@@ -52,6 +52,11 @@ req.get('/chunkybacon', {
 
 See [Campfire](http://campfirenow.com) class in `examples` directory for more details.
 
+## TODO
+
+**moar docs**
+
+
 ## Licence
 
 MIT
